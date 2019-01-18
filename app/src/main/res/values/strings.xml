@@ -9,4 +9,9 @@
     <string name="edit_mobile_number">edit mobile number</string>
     <string name="resend_otp">Resend Otp</string>
     <string name="otp">OTP</string>
+
+    <string name="btn_call_for_help">Call Help</string>
+    <string name="btn_locate_victim">Locate Victim</string>
+    <string name="title_activity_locate_victim">LocateVictim</string>
+    <string name="looking_for_help">Looking for help</string>
 </resources>
