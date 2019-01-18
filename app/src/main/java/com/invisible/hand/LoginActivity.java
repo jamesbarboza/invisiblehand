@@ -1,5 +1,7 @@
 package com.invisible.hand;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +33,10 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private static int RC_SIGN_IN = 100;
+
+    Context context;
+    private BackgroundCheck backgroundCheck;
+    private Intent serviceIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +70,23 @@ public class LoginActivity extends AppCompatActivity {
         if (currentUser != null) {
             //checkIfUserExist(currentUser);
             goToHomeActivity();
-        } else {
-
         }
+
+        context = this;
+        backgroundCheck = new BackgroundCheck(this.getContext());
+        serviceIntent = new Intent(this.getContext(), backgroundCheck.getClass());
+    }
+
+    private boolean isServiceRunning(Class<?> serviceClass){
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)){
+            if(serviceClass.getName().equals(service.service.getClassName())){
+                Log.i ("isMyServiceRunning?", true+"");
+                return true;
+            }
+        }
+        Log.i ("isMyServiceRunning?", false+"");
+        return false;
     }
 
     private void goToHomeActivity() {
@@ -136,6 +156,17 @@ public class LoginActivity extends AppCompatActivity {
         intent.putExtra("email",user.getEmail());
         Log.d("LoginActivity", "goToRegistration: starting activity");
         startActivity(intent);
+    }
+
+    public Context getContext(){
+        return context;
+    }
+
+    @Override
+    protected void onDestroy(){
+        stopService(serviceIntent);
+        Log.i("MAINACT", "onDestroy!");
+        super.onDestroy();
     }
 
 }
