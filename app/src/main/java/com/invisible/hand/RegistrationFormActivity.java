@@ -221,6 +221,8 @@ public class RegistrationFormActivity extends AppCompatActivity {
 
     private void goToHomeActivity() {
         Intent intent=new Intent(RegistrationFormActivity.this,HomeActivity.class);
+        intent.putExtra("name",userName);
+        intent.putExtra("mobile",userMobileNumber);
         startActivity(intent);
     }
 
