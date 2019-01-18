@@ -1,11 +1,13 @@
 package com.invisible.hand;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -24,6 +26,8 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.concurrent.TimeUnit;
 
@@ -35,6 +39,7 @@ public class RegistrationFormActivity extends AppCompatActivity {
     private EditText otpEditText;
     private TextView editMobileNumberTextView;
     private Button submitButton;
+    private Button resendButton;
 
     private FirebaseAuth mAuth;
 
@@ -47,6 +52,7 @@ public class RegistrationFormActivity extends AppCompatActivity {
     private PhoneAuthProvider.ForceResendingToken mResendToken;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,13 +69,26 @@ public class RegistrationFormActivity extends AppCompatActivity {
         otpEditText=findViewById(R.id.otpEditText);
         editMobileNumberTextView=findViewById(R.id.editMobileNumberTextView);
         submitButton=findViewById(R.id.submitButton);
+        resendButton=findViewById(R.id.resendButton);
         setDataInViews();
+
+        userMobileNumberEditText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(userMobileNumberEditText.isFocusable()){
+                    hideOtpViews();
+                }
+                return false;
+            }
+        });
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(submitButton.getText().toString().equals("Submit")){
                     // send data to firebase
+                    verifyPhoneNumberWithCode(verificationCode,getOtp());
+                    sendDataToDatabase();
                 }
                 else {
                     if (getPhoneNumber().length()<10) {
@@ -80,12 +99,14 @@ public class RegistrationFormActivity extends AppCompatActivity {
                         otpEditText.setVisibility(View.VISIBLE);
                         editMobileNumberTextView.setVisibility(View.VISIBLE);
                         submitButton.setText(R.string.submit_text);
+                        resendButton.setVisibility(View.VISIBLE);
                         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.addRule(RelativeLayout.BELOW,R.id.otpEditText);
                         params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                         params.setMargins(0,0,16,0);
                         submitButton.setLayoutParams(params);
                         startPhoneNumberVerification(getPhoneNumber());
+                        Log.d("RegistrationForrm", "onClick: "+verificationCode);
                         Log.d("RegistrationForm", "onClick: "+getPhoneNumber());
                     }
 
@@ -98,13 +119,13 @@ public class RegistrationFormActivity extends AppCompatActivity {
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential credential) {
-                Log.d("abc", "onVerificationCompleted:" + credential);
+                Log.d("RegistrationForm", "onVerificationCompleted:" + credential);
                 signInWithPhoneAuthCredential(credential);
             }
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
-                Log.w("abc", "onVerificationFailed", e);
+                Log.w("RegistrationForm", "onVerificationFailed", e);
                 if (e instanceof FirebaseAuthInvalidCredentialsException) {
                     userMobileNumberEditText.setError("Invalid phone number.");
                 } else if (e instanceof FirebaseTooManyRequestsException) {
@@ -116,12 +137,33 @@ public class RegistrationFormActivity extends AppCompatActivity {
             @Override
             public void onCodeSent(String verificationId,
                                    PhoneAuthProvider.ForceResendingToken token) {
-                Log.d("abc", "onCodeSent:" + verificationId);
+                Log.d("RegistrationForm", "onCodeSent:" + verificationId);
                 verificationCode = verificationId;
                 mResendToken = token;
             }
         };
 
+        resendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resendVerificationCode(getPhoneNumber(),mResendToken);
+            }
+        });
+
+    }
+
+    private void sendDataToDatabase() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("UserDataBase");
+        UploadUserData uploadUserData = new UploadUserData(userName,userEmailId,userMobileNumber);
+        databaseReference.child(mAuth.getUid()).setValue(uploadUserData);
+
+    }
+
+    private void hideOtpViews() {
+        editMobileNumberTextView.setVisibility(View.INVISIBLE);
+        otpEditText.setVisibility(View.INVISIBLE);
+        submitButton.setText(R.string.verify_mobile_number);
+        resendButton.setVisibility(View.INVISIBLE);
     }
 
     private void setDataInViews() {
@@ -130,10 +172,10 @@ public class RegistrationFormActivity extends AppCompatActivity {
     }
 
     public void signOut() {
-        Log.d("home", "signOut: outsss");
+        Log.d("RegistrationForm", "signOut: outsss");
         mAuth.signOut();
         if (LoginActivity.mGoogleSignInClient == null) {
-            Log.d("Home Activity", "signOut: in here");
+            Log.d("RegistrationForm", "signOut: in here");
             goToLoginActivity();
         } else {
             LoginActivity.mGoogleSignInClient.signOut();
@@ -141,7 +183,7 @@ public class RegistrationFormActivity extends AppCompatActivity {
             if (currentUser == null) {
                 goToLoginActivity();
             }
-            Log.d("user", "signOut: complete " + currentUser);
+            Log.d("RegistrationForm", "signOut: complete " + currentUser);
         }
 
     }
@@ -157,25 +199,29 @@ public class RegistrationFormActivity extends AppCompatActivity {
         signOut();
     }
 
-
-
     public void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Log.d("Abc", "signInWithCredential:success");
+                            Log.d("RegistrationForm", "signInWithCredential:success");
                             FirebaseUser user = task.getResult().getUser();
-
+                            sendDataToDatabase();
+                            goToHomeActivity();
                         } else {
-                            Log.w("Abc", "signInWithCredential:failure", task.getException());
+                            Log.w("RegistrationForm", "signInWithCredential:failure", task.getException());
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 otpEditText.setError("Invalid code.");
                             }
                         }
                     }
                 });
+    }
+
+    private void goToHomeActivity() {
+        Intent intent=new Intent(RegistrationFormActivity.this,HomeActivity.class);
+        startActivity(intent);
     }
 
 
@@ -206,8 +252,12 @@ public class RegistrationFormActivity extends AppCompatActivity {
     }
 
     public String getPhoneNumber() {
-        String phoneNumber = "+91" +userMobileNumberEditText.getText().toString();
-        Log.d("as", "getPhoneNumber: "+phoneNumber);
-        return phoneNumber;
+        userMobileNumber= "+91" +userMobileNumberEditText.getText().toString();
+        Log.d("as", "getPhoneNumber: "+userMobileNumber);
+        return userMobileNumber;
     }
+    public String getOtp() {
+        return otpEditText.getText().toString();
+    }
+
 }
