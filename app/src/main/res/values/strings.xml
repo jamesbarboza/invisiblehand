@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Invisbile Hand</string>
+    <string name="submit_text">Submit</string>
+    <string name="enter_your_mobile_number">Enter your Mobile Number</string>
+    <string name="enter_your_email_id">Enter your email-id</string>
+    <string name="enter_your_full_name">Enter your full name</string>
+    <string name="login_with_gmail">LogIn with Gmail</string>
+    <string name="verify_mobile_number">Verify Mobile Number</string>
+    <string name="edit_mobile_number">edit mobile number</string>
 </resources>

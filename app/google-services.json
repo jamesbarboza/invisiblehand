@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "863285677191",
+    "firebase_url": "https://bell-43bc9.firebaseio.com",
+    "project_id": "bell-43bc9",
+    "storage_bucket": "bell-43bc9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863285677191:android:f737f48f9444fcd3",
+        "android_client_info": {
+          "package_name": "com.invisible.hand"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "863285677191-brrast0bbratr2fl25ddu83r30ue9jv1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.invisible.hand",
+            "certificate_hash": "102d77c37680151fe72540d0abec219d62faddba"
+          }
+        },
+        {
+          "client_id": "863285677191-6r2d1f570j57lln67rqb2bqkb1rcq8rc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOXYSPRvSN-OmXItVW8ItY2S1F0Em6-JY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "863285677191-6r2d1f570j57lln67rqb2bqkb1rcq8rc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

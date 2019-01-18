@@ -11,5 +11,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="LogIn with Gmail" />
+        android:text="@string/login_with_gmail" />
 </android.widget.RelativeLayout>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegistrationFormActivity">
+
+    <EditText
+        android:id="@+id/userNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:hint="@string/enter_your_full_name"
+        />
+
+    <EditText
+        android:id="@+id/userEmailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_below="@id/userNameEditText"
+        android:hint="@string/enter_your_email_id"
+        />
+
+    <EditText
+        android:id="@+id/userMobileNumberEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:inputType="number"
+        android:maxLength="10"
+        android:layout_below="@id/userEmailEditText"
+        android:hint="@string/enter_your_mobile_number"
+        />
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/userMobileNumberEditText"
+        android:text="@string/verify_mobile_number"/>
+
+    <TextView
+        android:id="@+id/editMobileNumberTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="5dp"
+        android:clickable="true"
+        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
+        android:focusable="true"
+        android:visibility="invisible"
+        android:drawableRight="@drawable/edit"
+        android:drawableEnd="@drawable/edit"
+        android:layout_below="@id/userMobileNumberEditText"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:gravity="bottom"
+        android:text="@string/edit_mobile_number"/>
+    <EditText
+        android:id="@+id/otpEditText"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:layout_below="@id/editMobileNumberTextView"
+        android:hint="OTP"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"/>
+
+</android.widget.RelativeLayout>
