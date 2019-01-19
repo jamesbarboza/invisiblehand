@@ -6,89 +6,152 @@
     android:layout_height="match_parent"
     tools:context=".RegistrationFormActivity">
 
+
+
+    <TextView
+        android:id="@+id/tagTextView"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:gravity="center"
+        android:text="@string/no_absolute_victim_no_absolute_helper"/>
+
+
+    <TextView
+        android:layout_below="@id/tagTextView"
+        android:id="@+id/fullnameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/full_name"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
     <EditText
         android:id="@+id/userNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_below="@id/fullnameTextView"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/edittext_shape"
         android:hint="@string/enter_your_full_name"
-        />
+        android:textSize="17sp" />
+
+
+    <TextView
+        android:id="@+id/emailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/userNameEditText"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/email_id"
+        android:textSize="17sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/userEmailEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_below="@id/emailTextView"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_below="@id/userNameEditText"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/edittext_shape"
         android:hint="@string/enter_your_email_id"
-        />
+        android:textSize="17sp" />
+
+
+    <TextView
+        android:id="@+id/mobileTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/userEmailEditText"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/mobile_number"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
 
     <EditText
         android:id="@+id/userMobileNumberEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_below="@id/mobileTextView"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/edittext_shape"
         android:clickable="true"
         android:focusable="true"
+        android:hint="@string/enter_your_mobile_number"
         android:inputType="number"
         android:maxLength="10"
-        android:layout_below="@id/userEmailEditText"
-        android:hint="@string/enter_your_mobile_number"
-        />
+        android:textSize="17sp" />
+
     <Button
         android:id="@+id/submitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="10dp"
+        android:layout_alignParentRight="true"
         android:layout_below="@id/userMobileNumberEditText"
-        android:text="@string/verify_mobile_number"/>
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/verify_mobile_number" />
 
     <TextView
         android:id="@+id/editMobileNumberTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawablePadding="5dp"
-        android:clickable="true"
-        android:layout_marginRight="8dp"
-        android:layout_marginEnd="8dp"
-        android:focusable="true"
-        android:visibility="invisible"
-        android:drawableRight="@drawable/edit"
-        android:drawableEnd="@drawable/edit"
-        android:layout_below="@id/userMobileNumberEditText"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_below="@id/userMobileNumberEditText"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="2dp"
+        android:clickable="true"
+        android:drawableEnd="@drawable/edit"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/edit"
+        android:focusable="true"
         android:gravity="bottom"
-        android:text="@string/edit_mobile_number"/>
+        android:text="@string/edit_mobile_number"
+        android:textSize="17sp"
+        android:visibility="invisible" />
+
     <EditText
         android:id="@+id/otpEditText"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        android:layout_centerHorizontal="true"
-        android:visibility="invisible"
         android:layout_below="@id/editMobileNumberTextView"
-        android:hint="@string/otp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"/>
+        android:background="@drawable/edittext_shape"
+        android:hint="@string/otp"
+        android:inputType="number"
+        android:textSize="17sp"
+        android:visibility="invisible" />
+
     <Button
         android:id="@+id/resendButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/otpEditText"
-        android:text="@string/resend_otp"
         android:layout_toLeftOf="@id/submitButton"
         android:layout_toStartOf="@id/submitButton"
-        android:visibility="invisible"/>
+        android:text="@string/resend_otp"
+        android:visibility="invisible" />
 
 </android.widget.RelativeLayout>

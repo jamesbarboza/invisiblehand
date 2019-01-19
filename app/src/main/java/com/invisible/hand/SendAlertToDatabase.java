@@ -6,6 +6,10 @@ public class SendAlertToDatabase {
     private String userName;
     private String mobileNumber;
     private String helpType;
+
+    public SendAlertToDatabase(){
+
+    }
     public SendAlertToDatabase(String userName,String mobileNumber,String helpType,double longitude,double latitude){
         this.userName=userName;
         this.mobileNumber=mobileNumber;

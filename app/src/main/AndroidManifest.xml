@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
+        android:name=".AppNot"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -47,6 +48,8 @@
         </activity>
         <activity android:name=".RegistrationFormActivity" />
         <activity android:name=".HomeActivity" />
+
+        <service android:name=".FirstService"/>
     </application>
 
 </manifest>

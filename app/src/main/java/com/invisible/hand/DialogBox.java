@@ -35,7 +35,7 @@ public class DialogBox extends Application {
 
     public void generateDialogBox() {
         Log.d("Dialog", "generateDialogBox: in dialog");
-        itemArray = new String[]{"Cross Road", "2", "3", "Enter Manually"};
+        itemArray = new String[]{"Cross Road", "Need Medical help", "Stuck in a unknown area", "Enter Manually"};
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("What help you need?");
         final EditText manualEditText = new EditText(context);
@@ -82,6 +82,10 @@ public class DialogBox extends Application {
                 if (manualEditText.getText().toString().length() < 4) {
                     manualEditText.setError("please describe");
                 } else {
+
+                    if(itemSelected.equals("Enter Manually")){
+                        itemSelected=manualEditText.getText().toString();
+                    }
                     mAuth = FirebaseAuth.getInstance();
                     SendAlertToDatabase sendAlertToDatabase = new SendAlertToDatabase(userName, mobileNumber,
                             itemSelected, longitude, latitude);

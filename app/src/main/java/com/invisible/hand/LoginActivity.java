@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +24,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -34,17 +40,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private static int RC_SIGN_IN = 100;
 
-    Context context;
-    private BackgroundCheck backgroundCheck;
-    private Intent serviceIntent;
-
+    private DatabaseReference databaseReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         gmailLoginButton = findViewById(R.id.gmailLoginButton);
-
+        startService();
         mAuth = FirebaseAuth.getInstance();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -66,15 +69,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        Log.d("", "onStart: "+currentUser);
         Log.d("user", "onStart: " + currentUser + mAuth.getUid());
         if (currentUser != null) {
-            //checkIfUserExist(currentUser);
-            goToHomeActivity();
-        }
+            checkIfUserExist(currentUser);
+        } else {
 
-        context = this;
-        backgroundCheck = new BackgroundCheck(this.getContext());
-        serviceIntent = new Intent(this.getContext(), backgroundCheck.getClass());
+        }
     }
 
     private boolean isServiceRunning(Class<?> serviceClass){
@@ -135,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("LoginActivity", "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(LoginActivity.this, "LogIn Success", Toast.LENGTH_SHORT).show();
-                            goToRegistration(user);
+                            checkIfUserExist(user);
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -158,15 +159,43 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public Context getContext(){
-        return context;
+
+    private void goToHome() {
+        Intent intent=new Intent(LoginActivity.this,HomeActivity.class);
+        startActivity(intent);
     }
 
-    @Override
-    protected void onDestroy(){
-        stopService(serviceIntent);
-        Log.i("MAINACT", "onDestroy!");
-        super.onDestroy();
+    private void checkIfUserExist(final FirebaseUser currentUser) {
+        databaseReference = FirebaseDatabase.getInstance().getReference("UserDataBase");
+        // databaseReference.
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("S", "onDataChange: " + dataSnapshot);
+                if (dataSnapshot.child(mAuth.getUid()).exists()) {
+                    Log.d("s", "onDataChange: exists");
+                    goToHome();
+                } else {
+                    goToRegistration(currentUser);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
+
+
+    public void startService(){
+        Intent intent=new Intent(LoginActivity.this,FirstService.class);
+        startService(intent);
+    }
+    public void stopService(){
+        Intent intent=new Intent(LoginActivity.this,FirstService.class);
+        stopService(intent);
+    }
+
 
 }
